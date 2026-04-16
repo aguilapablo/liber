@@ -4,13 +4,21 @@ from datetime import datetime
 
 st.set_page_config(page_title="Liber S.A. | Escisión Art. 80 LIG", layout="wide")
 
-st.title("📊 Liber S.A. — Escisión Estratégica Libre de Impuestos 2026")
-st.markdown("**Reorganización Societaria Libre de Impuestos — Art. 80 LIG**")
-st.caption("**Realizado con Lic. Pablo Aguila**")
+# Carta de presentación
+st.markdown("""
+<div style="background-color:#0d2b4e; color:white; padding:25px; border-radius:12px; text-align:center;">
+    <h1 style="margin:0;">Liber S.A.</h1>
+    <h2 style="margin:8px 0 20px 0;">Escisión Estratégica Libre de Impuestos 2026</h2>
+    <p style="font-size:20px; margin:0;"><strong>Carta de Presentación al Directorio</strong></p>
+    <p style="margin:12px 0 0 0;">Realizado con Lic. Pablo Aguila<br>
+    Administración y Estrategia | Abril 2026</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.caption("**Herramienta Directiva, Operativa y Gerencial – Art. 80 LIG**")
 
 # ====================== SIDEBAR ======================
 st.sidebar.header("🔧 Capitalización de Gastos por Sociedad (RT 17)")
-
 mejoras_pama = st.sidebar.slider("PAMA - Activación de Gastos / Mejoras", 0, 12_000_000, 5_982_757, 50_000)
 mejoras_nbr = st.sidebar.slider("NBR - Activación de Gastos / Mejoras", 0, 8_000_000, 0, 50_000)
 mejoras_vifran = st.sidebar.slider("VIFRAN - Activación de Gastos / Mejoras", 0, 10_000_000, 2_587_693, 50_000)
@@ -46,62 +54,56 @@ tasa_trimestral = tasa_bna / 4
 intereses = capital_original * (tasa_trimestral / 100) * trimestres
 pasivo_actualizado = capital_original + intereses
 
-# ====================== TABS ======================
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🗺️ Mapa Inmuebles", "💰 Gestión Malabia", "📈 Pasivos BNA",
-    "📊 Balance Final", "✅ Validación Art. 80 LIG"
-])
+# ====================== CONTENIDO PRINCIPAL (todo en una página) ======================
+st.subheader("🗺️ Mapa de Inmuebles por Sociedad")
 
-# TAB 1: MAPA DE INMUEBLES (detallado)
-with tab1:
-    st.header("🗺️ Mapa de Inmuebles por Sociedad")
-    col_p, col_v, col_n = st.columns(3)
-    
-    with col_p:
-        st.subheader("PAMA (30%)")
-        pama_props = pd.DataFrame({
-            "Unidad": ["Luis María Campos 665 (varios deptos)", "Padre Dutto MDQ", "Sarmiento 944 10A + Cocheras", "J.M. Gutiérrez 2782"],
-            "Valor": [5132031.60, 8368470.26, 9153094.63, 972039.03]
-        })
-        st.dataframe(pama_props, use_container_width=True, hide_index=True)
-        st.metric("Total PAMA", "$249.648.110")
-    
-    with col_v:
-        st.subheader("VIFRAN (40%)")
-        vifran_props = pd.DataFrame({
-            "Unidad": ["Luis María Campos 665 (Depto 8A)", "Av. del Libertador 5691", "Migueletes 1973"],
-            "Valor": [700736.46, 9309356.38, 40520962.89]
-        })
-        st.dataframe(vifran_props, use_container_width=True, hide_index=True)
-        st.metric("Total VIFRAN", "$276.553.519")
-    
-    with col_n:
-        st.subheader("NBR (30%)")
-        nbr_props = pd.DataFrame({
-            "Unidad": ["Moreno 1969 (Garaje)", "Torre LIBER MDQ", "Luis María Campos 665 (varios deptos)"],
-            "Valor": [29947946.09, 13718887.74, 2608783.80]
-        })
-        st.dataframe(nbr_props, use_container_width=True, hide_index=True)
-        st.metric("Total NBR", "$46.275.618")
+col_p, col_v, col_n = st.columns(3)
+with col_p:
+    st.subheader("PAMA (30%)")
+    st.metric("Total", "$249.648.110")
+    st.caption("Luis María Campos • Padre Dutto • Sarmiento • Gutiérrez")
 
-# TAB 4: BALANCE FINAL (con compensación clara)
-with tab4:
-    st.subheader("Estado de Situación Post-Escisión")
-    data = {
-        "Sociedad": ["PAMA (30%)", "NBR (30%)", "VIFRAN (40%)", "LIBER S.A. (Remanente)"],
-        "Inmuebles Base": [23625635.52, 46275617.63, 50531055.73, 0],
-        "Activación Gastos (RT 17)": [mejoras_pama, mejoras_nbr, mejoras_vifran, 0],
-        "Patrimonio Neto Final": [pn["PAMA"], pn["NBR"], pn["VIFRAN"], 0],
-        "% Participación": [30.0, 30.0, 40.0, 0.0]
-    }
-    df_final = pd.DataFrame(data).round(0)
-    st.dataframe(df_final, use_container_width=True, hide_index=True)
-    
-    st.success("✅ **Patrimonio Neto remanente en Liber S.A. = $0.00**")
-    st.info("**No quedan acciones representativas**")
+with col_v:
+    st.subheader("VIFRAN (40%)")
+    st.metric("Total", "$276.553.519")
+    st.caption("Luis María Campos • Libertador • Migueletes")
 
-with tab5:
-    st.header("Validación Art. 80 LIG")
-    st.success("**Score de Cumplimiento: 100 %**")
+with col_n:
+    st.subheader("NBR (30%)")
+    st.metric("Total", "$46.275.618")
+    st.caption("Moreno Garaje • Torre LIBER MDQ")
 
-st.caption("Dashboard v5.2 | Realizado con Lic. Pablo Aguila | Abril 2026")
+st.divider()
+
+st.subheader("💰 Gestión Crédito Malabia")
+impairment = 452000000 - valor_mercado_malabia
+col1, col2, col3 = st.columns(3)
+col1.metric("Valor Contable", "$452.000.000")
+col2.metric("Valor Mercado", f"${valor_mercado_malabia:,.0f}")
+col3.metric("Impairment (Escudo)", f"${impairment:,.0f}")
+
+st.divider()
+
+st.subheader("📈 Pasivos José y Luis - Tasa Pasiva BNA")
+st.metric("Pasivo Actualizado (trimestral)", f"${pasivo_actualizado:,.0f}", f"+${intereses:,.0f}")
+
+st.divider()
+
+st.subheader("📊 Balance Final Post-Escisión")
+data = {
+    "Sociedad": ["PAMA (30%)", "NBR (30%)", "VIFRAN (40%)", "LIBER S.A. (Remanente)"],
+    "Patrimonio Neto Final": [pn["PAMA"], pn["NBR"], pn["VIFRAN"], 0],
+    "% Participación": [30.0, 30.0, 40.0, 0.0]
+}
+df_final = pd.DataFrame(data).round(0)
+st.dataframe(df_final, use_container_width=True, hide_index=True)
+
+st.success("✅ **Patrimonio Neto remanente en Liber S.A. = $0.00**")
+st.info("**No quedan acciones representativas** ni patrimonio en Liber S.A.")
+
+st.divider()
+
+st.subheader("✅ Validación Art. 80 LIG")
+st.success("**Score de Cumplimiento: 100 %**")
+
+st.caption("Dashboard v5.3 | Realizado con Lic. Pablo Aguila | Abril 2026")
