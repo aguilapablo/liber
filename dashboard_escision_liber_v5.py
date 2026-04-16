@@ -4,7 +4,6 @@ from datetime import datetime
 
 st.set_page_config(page_title="Liber S.A. | Escisión Art. 80 LIG", layout="wide")
 
-# ====================== CARTA DE PRESENTACIÓN ======================
 st.markdown("""
 <div style="background-color:#0d2b4e; color:white; padding:25px; border-radius:12px; text-align:center;">
     <h1 style="margin:0;">Liber S.A.</h1>
@@ -26,11 +25,6 @@ mejoras_vifran = st.sidebar.slider("VIFRAN - Activación de Gastos / Mejoras", 0
 st.sidebar.header("Ajustes Regulatorios")
 valor_mercado_malabia = st.sidebar.slider("Valor real de mercado Malabia", 200_000_000, 452_000_000, 300_000_000, 1_000_000)
 tasa_bna = st.sidebar.slider("Tasa Pasiva BNA anual (%)", 20.0, 80.0, 45.0, 0.5)
-
-# ====================== DACIÓN SEPARADA ======================
-st.sidebar.header("Dación en Pago")
-dacion_pablo = st.sidebar.number_input("Dación Pablo (aporte / expensas)", value=100_000_000, step=1_000_000)
-dacion_jose_luis = st.sidebar.number_input("Dación José + Luis (deuda actualizada)", value=52_000_000, step=1_000_000)
 
 # ====================== CÁLCULOS ======================
 base_inmuebles = {"PAMA": 23625635.52, "NBR": 46275617.63, "VIFRAN": 50531055.73}
@@ -58,16 +52,16 @@ tasa_trimestral = tasa_bna / 4
 intereses = capital_original * (tasa_trimestral / 100) * trimestres
 pasivo_actualizado = capital_original + intereses
 
-# ====================== CONTENIDO PRINCIPAL (scroll) ======================
+# ====================== CONTENIDO PRINCIPAL ======================
 st.subheader("🗺️ Mapa de Inmuebles por Sociedad")
-col_p, col_v, col_n = st.columns(3)
-with col_p:
+col1, col2, col3 = st.columns(3)
+with col1:
     st.subheader("PAMA (30%)")
     st.metric("Total", "$249.648.110")
-with col_v:
+with col2:
     st.subheader("VIFRAN (40%)")
     st.metric("Total", "$276.553.519")
-with col_n:
+with col3:
     st.subheader("NBR (30%)")
     st.metric("Total", "$46.275.618")
 
@@ -75,13 +69,10 @@ st.divider()
 
 st.subheader("💰 Gestión Crédito Malabia")
 impairment = 452000000 - valor_mercado_malabia
-col1, col2, col3 = st.columns(3)
-col1.metric("Valor Contable", "$452.000.000")
-col2.metric("Valor Mercado", f"${valor_mercado_malabia:,.0f}")
-col3.metric("Impairment (Escudo)", f"${impairment:,.0f}")
-
-st.write("**Dación en pago• Pablo (aporte): **${dacion_pablo:,.0f}**")
-st.write(f"• José + Luis (deuda actualizada BNA): **${dacion_jose_luis:,.0f}**")
+col_m1, col_m2, col_m3 = st.columns(3)
+col_m1.metric("Valor Contable", "$452.000.000")
+col_m2.metric("Valor Mercado", f"${valor_mercado_malabia:,.0f}")
+col_m3.metric("Impairment (Escudo)", f"${impairment:,.0f}")
 
 st.divider()
 
@@ -96,8 +87,8 @@ data = {
     "Patrimonio Neto Final": [pn["PAMA"], pn["NBR"], pn["VIFRAN"], 0],
     "% Participación": [30.0, 30.0, 40.0, 0.0]
 }
-df_final = pd.DataFrame(data).round(0)
-st.dataframe(df_final, use_container_width=True, hide_index=True)
+df = pd.DataFrame(data).round(0)
+st.dataframe(df, width='stretch', hide_index=True)
 
 st.success("✅ **Patrimonio Neto remanente en Liber S.A. = $0.00**")
 st.info("**No quedan acciones representativas** ni patrimonio en Liber S.A.")
@@ -105,7 +96,7 @@ st.info("**No quedan acciones representativas** ni patrimonio en Liber S.A.")
 st.divider()
 
 st.subheader("✅ Validación Art. 80 LIG – Checklist Ampliado")
-cumplimiento = pd.DataFrame({
+check = pd.DataFrame({
     "Requisito": [
         "Empresa en marcha", "Continuidad de actividad por 2 años",
         "Proporcionalidad exacta de capital", "Ausencia de distribución asimétrica",
@@ -115,7 +106,7 @@ cumplimiento = pd.DataFrame({
     ],
     "Estado": ["✅ Garantizado"] * 9
 })
-st.dataframe(cumplimiento, use_container_width=True, hide_index=True)
+st.dataframe(check, width='stretch', hide_index=True)
 
 st.success("**Score de Cumplimiento Art. 80 LIG: 100 %**")
 
